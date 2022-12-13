@@ -28,7 +28,7 @@
 #include "io/Screen.h"
 
 void framebuffer_size_callback(GLFWwindow* window, int width, int height);
-void processInput(GLFWwindow* window, double dt);
+void processInput(double dt);
 
 //using namespace std;
 
@@ -76,17 +76,13 @@ int main() {
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 #endif // DEBUG
 
-
-
 	//creating window
-	GLFWwindow* window = glfwCreateWindow(SCR_WIDTH, SCR_HEIGHT, "OpenGL Tutiorial",NULL,NULL);
-	if (window == NULL) { //if window NOT created
+	//set focus glfw to this window
+	if (!screen.init()) {
 		std::cout << "Could not create window." << std::endl;
 		glfwTerminate();
 		return -1;
 	}
-	//set focus glfw to this window
-	glfwMakeContextCurrent(window);
 
 	//glad allows us to manage openGL function and classes
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
@@ -96,20 +92,8 @@ int main() {
 	}
 
 	//position of the window
-	glViewport(0,0, SCR_WIDTH, SCR_HEIGHT);
-
 	//everytime window size change it fit things inside
-	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-	glfwSetKeyCallback(window, Keyboard::keyCallback);
-
-	glfwSetCursorPosCallback(window, Mouse::cursorPosCallback);
-	glfwSetMouseButtonCallback(window, Mouse::mouseButtonCallback);
-	glfwSetScrollCallback(window, Mouse::mouseWheelCallback);
-
-	glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
-
-	glEnable(GL_DEPTH_TEST);
+	screen.setParameters();
 
 	/*
 		shaders
@@ -280,7 +264,7 @@ int main() {
 	}*/
 	
 	//MAIN WHILELOOP
-	while (!glfwWindowShouldClose(window)) {
+	while (!screen.shouldClose()) {
 		
 
 		//std::cout << (double)Mouse::getDX() << " , " << (double)Mouse::getDY() << std::endl;
@@ -288,12 +272,11 @@ int main() {
 		deltaTime = currentTime - lastFrame;
 		lastFrame = currentTime;
 
-		//Keyboard input
-		processInput(window, deltaTime);
+		//User input
+		processInput(deltaTime);
 		
 		//clearing and setting background
-		glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+		screen.update();
 
 		//binding textures
 		glActiveTexture(GL_TEXTURE0);
@@ -344,8 +327,7 @@ int main() {
 		//glDrawElements(primitive, noVertices/2, GL_UNSIGNED_INT, (void*)(3*sizeof(unsigned int)));
 
 		//generates next frame while previous frame is being displayed
-		glfwSwapBuffers(window);
-		glfwPollEvents();
+		screen.newFrame();
 	}
 
 	glDeleteVertexArrays(1, &VAO);
@@ -362,9 +344,9 @@ void framebuffer_size_callback(GLFWwindow* window, int width, int height) {
 	SCR_HEIGHT = height;
 }
 
-void processInput(GLFWwindow* window, double dt) {
+void processInput(double dt) {
 	if (Keyboard::key(GLFW_KEY_ESCAPE)) {
-		glfwSetWindowShouldClose(window, true);
+		screen.setShouldClose(true);
 	}
 
 	//if pressed changes value every frame

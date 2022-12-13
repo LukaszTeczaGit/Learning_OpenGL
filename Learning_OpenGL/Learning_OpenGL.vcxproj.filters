@@ -26,6 +26,7 @@
     </ClCompile>
     <ClCompile Include="src\io\Camera.cpp" />
     <ClCompile Include="src\io\Screen.cpp" />
+    <ClCompile Include="src\graphics\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\object.vs" />
@@ -46,6 +47,7 @@
     </ClInclude>
     <ClInclude Include="src\io\Camera.h" />
     <ClInclude Include="src\io\Screen.h" />
+    <ClInclude Include="src\graphics\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\supra.jpg" />

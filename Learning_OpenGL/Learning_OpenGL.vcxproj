@@ -150,6 +150,7 @@
     <ClCompile Include="src\io\Screen.cpp" />
     <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\graphics\Shader.cpp" />
+    <ClCompile Include="src\graphics\Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="assets\object.fs" />
@@ -162,6 +163,7 @@
     <ClInclude Include="src\io\Mouse.h" />
     <ClInclude Include="src\graphics\Shader.h" />
     <ClInclude Include="src\io\Screen.h" />
+    <ClInclude Include="src\graphics\Texture.h" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\Moon.jpg" />
